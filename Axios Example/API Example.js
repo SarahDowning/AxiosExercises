@@ -2,15 +2,8 @@
 
 const getOutput = document.querySelector("#getOutput");
 
-const getUser = document.querySelector("section#users");
-const getUserByID = document.querySelector("button#listUserById");
-
-const form = this;
-
-// Get request for list of users
-document.querySelector("button#listUser").addEventListener("click", getUser);
-
 const getUsers = () => {
+    
     axios
         .get(`https://reqres.in/api/users?page=2`)
         .then(res => {
@@ -40,11 +33,13 @@ const getUsers = () => {
             }
         })
         .catch(err => console.error(err));
+}
+
+// Get request for list of users
+document.querySelector("button#listUser").addEventListener("click", getUsers);
 
 
-    // Get request for single user with id of 2
-    document.querySelector("button#listUserById").addEventListener("click", getUserByID);
-
+const getUserById = () => {
     axios
         .get(`https://reqres.in/api/users/2`)
         .then(res => {
@@ -53,46 +48,48 @@ const getUsers = () => {
             getOutput.appendChild(userById);
         })
         .catch(err => console.error(err));
+}
 
-    // Post request for create
+// Get request for single user with id of 2
+document.querySelector("button#listUserById").addEventListener("click", getUserById);
 
-    document.querySelector("section#users").addEventListener("submit", function(event) {
+
+
+// Post request for create
+document.querySelector("#userForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        console.log("THIS: ", this);
-        const form = this;
-
+        // const form = event.target
+        const form = this
         const userData = {
-            id: form.id.value,
-            email: form.email.value,
+            id: form.userId.value,
+            email: form.emailId.value,
             first_name: form.firstName.value,
             last_name: form.lastName.value,
             avatar: "'https://reqres.in/img/faces/12-image.jpg'"
         };
-        console.log("DATA: ", userData);
 
         axios
             .post(`https://reqres.in/api/users`, userData)
             .then((res) => {
-                getUsers();
                 form.reset();
                 form.firstName.focus();
                 console.log(res);
             }).catch(err => console.error(err));
-
-                // Deleting the people
-        document.querySelector("#deleteForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-         const userId = form.userId.value;
-       
-         axios
-            .delete(`https://reqres.in/api/users/2,${userId}`)
-            .then(res => {
-                console.log(res);
-                form.reset();
-                form.userId.focus();
-                getUsers();
-      }) .catch(err => console.error(err));
-    })
 });
-}
+
+//                 // Deleting the people
+//         document.querySelector("#deleteForm").addEventListener("submit", function(event) {
+//         event.preventDefault();
+//          const userId = form.userId.value;
+       
+//          axios
+//             .delete(`https://reqres.in/api/users/2,${userId}`)
+//             .then(res => {
+//                 console.log(res);
+//                 form.reset();
+//                 form.userId.focus();
+//                 getUsers();
+//       }) .catch(err => console.error(err));
+//     })
+// });
